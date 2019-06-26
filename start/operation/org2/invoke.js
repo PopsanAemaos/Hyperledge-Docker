@@ -6,8 +6,9 @@
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
+const util = require("util")
 
-const ccpPath = path.resolve(__dirname,'..', '..', '..', 'basic-network', 'connection.1.json');
+const ccpPath = path.resolve(__dirname,'..', '..', '..', 'basic-network', 'connection.2.json');
 
 async function main() {
     try {
@@ -36,11 +37,10 @@ async function main() {
         console.log('******************************************************************');
 
         // Submit the specified transaction.
-        //createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        // await contract.submitTransaction("createuser","11111","ford","081942");
-        await contract.submitTransaction("createwallet","Gucci","10000","ford");
-        
+        var args =[ "1111","ford","081942"] 
+        const argsString = args.map((arg) => util.format('%s', arg)).join('|');
+        await contract.submitTransaction("createuser",argsString);
+        //await channel.sendTransactionProposal("createwallet","0000","Gucci","10000","ford");
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.

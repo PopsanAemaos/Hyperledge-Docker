@@ -37,7 +37,10 @@ fi
 # clean the keystore
 rm -rf ./hfc-key-store
 # clean the wallet  
-rm -rf ./../API-NODE-JS-SDK/blockchain/config/wallet
+rm -rf ./../../API-NODE-JS-SDK/blockchain/config/wallet
+rm -rf ./../../API-NODE-JS-SDK/blockchain/config/walletorg1
+rm -rf ./../../API-NODE-JS-SDK/blockchain/config/walletorg2
+rm -rf ./../../API-NODE-JS-SDK/blockchain/config/walletorg3
 cat<<EOF
 -----------------------------------------------------------------------------------------------------------------------
 ----------------------clean ./API-NODE-JS-SDK/blockchain/config/wallet Suscess----------------------------------------
@@ -59,7 +62,7 @@ cd ../basic-network
 ./start.sh
 
 cat<<EOF 
-============================================================! ! ! FUCK ! ! !=======================================================
+============================================================! ! ! KMITL ! ! !=======================================================
 EOF
 
 # # launch network; create channel and join peer to channel
@@ -182,90 +185,45 @@ docker exec \
     -n mychaincode \
     -l "$CC_RUNTIME_LANGUAGE" \
     -v 1.0 \
-	-c '{"Args":[]}' \
-	-P "OR ('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
+	  -c '{"Args":[]}' \
+	  -P "OR ('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
     
-cat<<EOF 
-============================================================! ! ! FUCK U CHAIN ! ! !=======================================================
-============================================================! ! ! FUCK U CHAIN ! ! !=======================================================
-============================================================! ! ! FUCK U CHAIN ! ! !=======================================================
-EOF
-# echo "Waiting for instantiation request to be committed ..."
-# sleep 10
-
-# echo "Submitting initLedger transaction to smart contract on mychaincode"
+# echo "Instantiating smart contract on mychaincode"
 # docker exec \
-#   -e CORE_PEER_LOCALMSPID=Org1MSP \
-#   -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 \
-#   -e CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp \
-#   -e CORE_PEER_TLS_ROOTCERT_FILE=${PEER0ORG1_TLS_ROOTCERT_FILE} \  cli \
-#   peer0.org1.example.com \
-#   peer chaincode invoke \
+#   -e CORE_PEER_LOCALMSPID=Org2MSP \
+#   -e CORE_PEER_ADDRESS=peer0.org2.example.com:7051 \
+#   -e CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org2.example.com/msp \
+#   -e CORE_PEER_TLS_ROOTCERT_FILE=${PEER0ORG2_TLS_ROOTCERT_FILE} \
+#   peer0.org2.example.com \
+#   peer chaincode instantiate \
 #     -o orderer.example.com:7050 \
-#     -C mychaincode \
+#     -C mychannel \
 #     -n mychaincode \
-#     -c '{"Args":["invoke","a","b","10"]}' \
-#     --waitForEvent \
-#     --tls \
-#     --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
-#     --peerAddresses peer0.org1.example.com:7051 \
-#     --tlsRootCertFiles ${PEER0ORG1_TLS_ROOTCERT_FILE}
+#     -l "$CC_RUNTIME_LANGUAGE" \
+#     -v 1.0 \
+# 	-c '{"Args":[]}' \
+# 	-P "AND ('Org1MSP.member','Org2MSP.member','Org3MSP.member','Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
 
-# set +x
+#   echo "Instantiating smart contract on mychaincode"
+# docker exec \
+#   -e CORE_PEER_LOCALMSPID=Org3MSP \
+#   -e CORE_PEER_ADDRESS=peer0.org3.example.com:7051 \
+#   -e CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org3.example.com/msp \
+#   -e CORE_PEER_TLS_ROOTCERT_FILE=${PEER0ORG3_TLS_ROOTCERT_FILE} \
+#   peer0.org3.example.com \
+#   peer chaincode instantiate \
+#     -o orderer.example.com:7050 \
+#     -C mychannel \
+#     -n mychaincode \
+#     -l "$CC_RUNTIME_LANGUAGE" \
+#     -v 1.0 \
+# 	-c '{"Args":[]}' \
+# 	-P "AND ('Org1MSP.member','Org2MSP.member','Org3MSP.member','Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
+  
+   
+cat<<EOF 
+==========================================================! ! ! BLOCKCHAIN OPEN ! ! !=======================================================
+============================================================! ! ! SUCCESSFULLY ! ! !=======================================================
+=========================================================! ! ! GOOD LICK HAVE FUN ! ! !=======================================================
+EOF
 
-# cat <<EOF
-
-# Total setup execution time : $(($(date +%s) - starttime)) secs ...
-
-# Next, use the mychaincode applications to interact with the deployed mychaincode contract.
-# The mychaincode applications are available in multiple programming languages.
-# Follow the instructions for the programming language of your choice:
-
-# JavaScript:
-
-#   Start by changing into the "javascript" directory:
-#     cd javascript
-
-#   Next, install all required packages:
-#     npm install
-
-#   Then run the following applications to enroll the admin user, and register a new user
-#   called user1 which will be used by the other applications to interact with the deployed
-#   mychaincode contract:
-#     node enrollAdmin
-#     node registerUser
-
-#   You can run the invoke application as follows. By default, the invoke application will
-#   create a new car, but you can update the application to submit other transactions:
-#     node invoke
-
-#   You can run the query application as follows. By default, the query application will
-#   return all cars, but you can update the application to evaluate other transactions:
-#     node query
-
-# TypeScript:
-
-#   Start by changing into the "typescript" directory:
-#     cd typescript
-
-#   Next, install all required packages:
-#     npm install
-
-#   Next, compile the TypeScript code into JavaScript:
-#     npm run build
-
-#   Then run the following applications to enroll the admin user, and register a new user
-#   called user1 which will be used by the other applications to interact with the deployed
-#   mychaincode contract:
-#     node dist/enrollAdmin
-#     node dist/registerUser
-
-#   You can run the invoke application as follows. By default, the invoke application will
-#   create a new car, but you can update the application to submit other transactions:
-#     node dist/invoke
-
-#   You can run the query application as follows. By default, the query application will
-#   return all cars, but you can update the application to evaluate other transactions:
-#     node dist/query
-
-# EOF

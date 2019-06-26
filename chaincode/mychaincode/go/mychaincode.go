@@ -46,18 +46,32 @@ func (t *SmartContract) createuser(stub shim.ChaincodeStubInterface, args[]strin
 
 	justString := strings.Join(args,"")
 	args = strings.Split(justString,"|")
-	// 0			1			2		
-	// StudentID	Name		Tel			
-	if len(args) != 3 {
+	// 0			1			2		3
+	// StudentID	Name		Tel		hashID	
+	if len(args) != 4 {
 		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
+	if len(args[0]) <= 0 {
+		return shim.Error("StudentID = null")
+	}
+	if len(args[1]) <= 0 {
+		return shim.Error("Name = null")
+	}
+	if len(args[2]) <= 0 {
+		return shim.Error("Tel = null")
+	}
+	if len(args[3]) <= 0 {
+		return shim.Error("hash = null")
+	}
+
+
 	Users := users{
 			StudentID 	:  args[0],
 			Name 		:  args[1],
 			Tel   		:  args[2],
 			Status    	:  "true",	 
 		  }	
-	userKey := "StudentID|"+Users.StudentID
+	userKey := "StudentID|"+args[3]
 
 	Usersbytes,err := json.Marshal(Users)
 	if err != nil {
@@ -72,17 +86,29 @@ func (t *SmartContract) createuser(stub shim.ChaincodeStubInterface, args[]strin
 func (t *SmartContract) createwallet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	justString := strings.Join(args,"")
 	args = strings.Split(justString,"|")
-	// 0			1			2			
-	// walletname	Money		Owner			
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	// 0			1			2			3
+	// walletname	Money		Owner		hashID	
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
+	}
+	if len(args[0]) <= 0 {
+		return shim.Error("walletname = null")
+	}
+	if len(args[1]) <= 0 {
+		return shim.Error("Money = null")
+	}
+	if len(args[2]) <= 0 {
+		return shim.Error("Owner = null")
+	}
+	if len(args[3]) <= 0 {
+		return shim.Error("hash = null")
 	}
 	Wallet := wallet{
 			Walletname 	:  args[0],
 			Money  		:  args[1],
 			Owner    	:  args[2],	 
 		  }	
-	walletKey := "Walletname|"+Wallet.Walletname
+	walletKey := "Walletname|"+args[3]
 	wallebytes,err := json.Marshal(Wallet)
 	if err != nil {
 		return shim.Error("Marshal is error"+err.Error())
