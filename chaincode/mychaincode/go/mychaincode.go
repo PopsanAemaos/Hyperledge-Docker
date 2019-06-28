@@ -17,7 +17,6 @@ type users struct {
 	Status      string 	`json:"Status"`
 }
 type wallet struct {
-	WalletID	string	`json:"walletID"`
 	Walletname 	string 	`json:"Walletname"`
 	Money 		string 	`json:"Money"` 
 	Owner		string	`json:"Owner"`
