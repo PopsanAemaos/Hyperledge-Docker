@@ -4,7 +4,7 @@ import (
 	"strings"
 	// "strconv"
 	"encoding/json"
-
+	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -21,12 +21,10 @@ type wallet struct {
 	Money 		string 	`json:"Money"` 
 	Owner		string	`json:"Owner"`
 }
+
 func (t *SmartContract) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
-
-
-
 func (t *SmartContract) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	if function == "createuser" {
@@ -36,6 +34,9 @@ func (t *SmartContract) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		// Deletes an entity from its state
 		return t.createwallet(stub, args)
 	} else if function == "query" {
+		// the old "Query" is now implemtned in invoke
+		return t.query(stub, args)
+	} else if function == "createstandard" {
 		// the old "Query" is now implemtned in invoke
 		return t.query(stub, args)
 	}
@@ -62,14 +63,14 @@ func (t *SmartContract) createuser(stub shim.ChaincodeStubInterface, args[]strin
 	if len(args[3]) <= 0 {
 		return shim.Error("hash = null")
 	}
-
-
 	Users := users{
 			StudentID 	:  args[0],
 			Name 		:  args[1],
 			Tel   		:  args[2],
 			Status    	:  "true",	 
-		  }	
+		  }
+		  
+
 	userKey := "StudentID|"+args[3]
 
 	Usersbytes,err := json.Marshal(Users)
